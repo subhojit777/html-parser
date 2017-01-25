@@ -1,0 +1,39 @@
+{
+  "name": "html-parser",
+  "version": "1.0.0",
+  "description": "Realtime HTML parser",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/subhojit777/html-parser.git"
+  },
+  "keywords": [
+    "dom",
+    "htmlparser"
+  ],
+  "author": "Subhojit Paul <subhojitpaul21@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/subhojit777/html-parser/issues"
+  },
+  "homepage": "https://github.com/subhojit777/html-parser#readme",
+  "dependencies": {
+    "htmlparser2": "^3.9.2",
+    "react": "^15.4.2",
+    "react-dom": "^15.4.2"
+  },
+  "devDependencies": {
+    "babel-plugin-transform-react-jsx": "^6.8.0",
+    "babelify": "^7.3.0",
+    "browserify": "^13.3.0",
+    "gulp": "^3.9.1",
+    "gulp-babel": "^6.1.2",
+    "gulp-sourcemaps": "^2.4.0",
+    "vinyl-buffer": "^1.0.0",
+    "vinyl-source-stream": "^1.1.0",
+    "watchify": "^3.8.0"
+  }
+}
