@@ -1,16 +1,18 @@
 var React = require('react');
 var ReactDOM = require('react-dom');
-var Editor = require('./editor');
-var View = require('./view');
+var View = require('./view.jsx');
+var Editor = require('./editor.jsx');
 
 var mountNode = document.getElementById('htmlparser');
 
 class Main extends React.Component {
   render() {
-    <div>
-      <Editor />
-      <View />
-    </div>
+    return (
+      <div>
+        <Editor />
+        <View />
+      </div>
+    );
   }
 }
 
