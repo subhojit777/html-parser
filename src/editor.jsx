@@ -1,11 +1,11 @@
-var React = require('react');
+import React, { Component } from 'react'
 
-class Editor extends React.Component {
+class Editor extends Component {
   render() {
     return (
       <textarea></textarea>
-    );
+    )
   }
 }
 
-module.exports = Editor;
+export default Editor

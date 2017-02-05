@@ -1,11 +1,11 @@
-var React = require('react');
+import React, { Component } from 'react'
 
-class View extends React.Component {
+class View extends Component {
   render() {
     return (
       <div>this is the view</div>
-    );
+    )
   }
 }
 
-module.exports = View;
+export default View
