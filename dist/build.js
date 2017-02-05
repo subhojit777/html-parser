@@ -20724,16 +20724,32 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 var Editor = function (_Component) {
   _inherits(Editor, _Component);
 
-  function Editor() {
+  function Editor(props) {
     _classCallCheck(this, Editor);
 
-    return _possibleConstructorReturn(this, (Editor.__proto__ || Object.getPrototypeOf(Editor)).apply(this, arguments));
+    var _this = _possibleConstructorReturn(this, (Editor.__proto__ || Object.getPrototypeOf(Editor)).call(this, props));
+
+    _this.handleChange = _this.handleChange.bind(_this);
+    return _this;
   }
 
   _createClass(Editor, [{
+    key: 'handleChange',
+    value: function handleChange() {
+      this.props.onUserInput(this.textInput.value);
+    }
+  }, {
     key: 'render',
     value: function render() {
-      return _react2.default.createElement('textarea', null);
+      var _this2 = this;
+
+      return _react2.default.createElement('textarea', {
+        value: this.props.markup,
+        ref: function ref(input) {
+          return _this2.textInput = input;
+        },
+        onChange: this.handleChange
+      });
     }
   }]);
 
@@ -20776,20 +20792,39 @@ var mountNode = document.getElementById('htmlparser');
 var Main = function (_Component) {
   _inherits(Main, _Component);
 
-  function Main() {
+  function Main(props) {
     _classCallCheck(this, Main);
 
-    return _possibleConstructorReturn(this, (Main.__proto__ || Object.getPrototypeOf(Main)).apply(this, arguments));
+    var _this = _possibleConstructorReturn(this, (Main.__proto__ || Object.getPrototypeOf(Main)).call(this, props));
+
+    _this.state = {
+      markup: ''
+    };
+
+    _this.handleUserInput = _this.handleUserInput.bind(_this);
+    return _this;
   }
 
   _createClass(Main, [{
+    key: 'handleUserInput',
+    value: function handleUserInput(markup) {
+      this.setState({
+        markup: markup
+      });
+    }
+  }, {
     key: 'render',
     value: function render() {
       return _react2.default.createElement(
         'div',
         null,
-        _react2.default.createElement(_editor2.default, null),
-        _react2.default.createElement(_view2.default, null)
+        _react2.default.createElement(_editor2.default, {
+          markup: this.state.markup,
+          onUserInput: this.handleUserInput
+        }),
+        _react2.default.createElement(_view2.default, {
+          markup: this.state.markup
+        })
       );
     }
   }]);
@@ -20823,10 +20858,10 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 var View = function (_Component) {
   _inherits(View, _Component);
 
-  function View() {
+  function View(props) {
     _classCallCheck(this, View);
 
-    return _possibleConstructorReturn(this, (View.__proto__ || Object.getPrototypeOf(View)).apply(this, arguments));
+    return _possibleConstructorReturn(this, (View.__proto__ || Object.getPrototypeOf(View)).call(this, props));
   }
 
   _createClass(View, [{
@@ -20835,7 +20870,7 @@ var View = function (_Component) {
       return _react2.default.createElement(
         'div',
         null,
-        'this is the view'
+        this.props.markup
       );
     }
   }]);

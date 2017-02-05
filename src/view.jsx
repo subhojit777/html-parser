@@ -1,9 +1,13 @@
 import React, { Component } from 'react'
 
 class View extends Component {
+  constructor(props) {
+    super(props)
+  }
+
   render() {
     return (
-      <div>this is the view</div>
+      <div>{ this.props.markup }</div>
     )
   }
 }
