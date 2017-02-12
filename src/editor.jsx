@@ -16,6 +16,8 @@ class Editor extends Component {
         value={ this.props.markup }
         ref={ input => this.textInput = input }
         onChange={ this.handleChange }
+        rows="20"
+        cols="50"
       ></textarea>
     )
   }
