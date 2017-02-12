@@ -28376,7 +28376,7 @@ function config (name) {
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
 
 },{}],232:[function(require,module,exports){
-'use strict';
+"use strict";
 
 Object.defineProperty(exports, "__esModule", {
   value: true
@@ -28384,7 +28384,7 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _react = require('react');
+var _react = require("react");
 
 var _react2 = _interopRequireDefault(_react);
 
@@ -28409,21 +28409,23 @@ var Editor = function (_Component) {
   }
 
   _createClass(Editor, [{
-    key: 'handleChange',
+    key: "handleChange",
     value: function handleChange() {
       this.props.onUserInput(this.textInput.value);
     }
   }, {
-    key: 'render',
+    key: "render",
     value: function render() {
       var _this2 = this;
 
-      return _react2.default.createElement('textarea', {
+      return _react2.default.createElement("textarea", {
         value: this.props.markup,
         ref: function ref(input) {
           return _this2.textInput = input;
         },
-        onChange: this.handleChange
+        onChange: this.handleChange,
+        rows: "20",
+        cols: "50"
       });
     }
   }]);
@@ -28547,28 +28549,42 @@ var View = function (_Component) {
   }
 
   _createClass(View, [{
+    key: 'componentDidMount',
+    value: function componentDidMount() {
+      this.view = document.getElementById('view');
+    }
+  }, {
     key: 'parseHtml',
     value: function parseHtml() {
-      var handler = new _htmlparser2.default.DomHandler(function (err, dom) {
-        if (err)
-          // @TODO change this.
-          console.log(err);else
-          // Use this to create the view.
-          console.log(dom);
+      var handler = new _htmlparser2.default.DomHandler({
+        normalizeWhitespace: true
       });
 
       var parser = new _htmlparser2.default.Parser(handler);
       parser.write(this.props.markup);
       parser.done();
+
+      return handler;
     }
   }, {
     key: 'render',
     value: function render() {
-      return _react2.default.createElement(
-        'div',
-        null,
-        this.parseHtml()
-      );
+      var parsedHtml = this.parseHtml();
+
+      if (parsedHtml.error) {
+        return _react2.default.createElement(
+          'div',
+          { id: 'view' },
+          'Error occurred'
+        );
+      } else {
+        // @TODO User parsedHtml.dom to render the elements.
+        return _react2.default.createElement(
+          'div',
+          { id: 'view' },
+          'Render parsed HTML here'
+        );
+      }
     }
   }]);
 

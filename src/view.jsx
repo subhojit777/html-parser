@@ -8,25 +8,36 @@ class View extends Component {
     this.parseHtml = this.parseHtml.bind(this)
   }
 
+  componentDidMount() {
+    this.view = document.getElementById('view')
+  }
+
   parseHtml() {
-    let handler = new HtmlParser.DomHandler((err, dom) => {
-      if (err)
-        // @TODO change this.
-        console.log(err)
-      else
-        // Use this to create the view.
-        console.log(dom)
+    let handler = new HtmlParser.DomHandler({
+      normalizeWhitespace: true
     })
 
     let parser = new HtmlParser.Parser(handler)
     parser.write(this.props.markup)
     parser.done()
+
+    return handler
   }
 
   render() {
-    return (
-      <div>{ this.parseHtml() }</div>
-    )
+    let parsedHtml = this.parseHtml()
+
+    if (parsedHtml.error) {
+      return (
+        <div id="view">Error occurred</div>
+      )
+    }
+    else {
+      // @TODO User parsedHtml.dom to render the elements.
+      return (
+        <div id="view">Render parsed HTML here</div>
+      )
+    }
   }
 }
 
