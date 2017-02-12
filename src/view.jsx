@@ -13,30 +13,39 @@ class View extends Component {
   }
 
   parseHtml() {
-    let handler = new HtmlParser.DomHandler({
+    let domHandler = new HtmlParser.DomHandler({
       normalizeWhitespace: true
     })
-
-    let parser = new HtmlParser.Parser(handler)
+    let parser = new HtmlParser.Parser(domHandler)
     parser.write(this.props.markup)
     parser.done()
 
-    return handler
+    return domHandler
   }
 
   render() {
-    let parsedHtml = this.parseHtml()
+    let domHandler = this.parseHtml()
 
-    if (parsedHtml.error) {
+    if (domHandler.error) {
       return (
         <div id="view">Error occurred</div>
       )
     }
     else {
-      // @TODO User parsedHtml.dom to render the elements.
-      return (
-        <div id="view">Render parsed HTML here</div>
-      )
+      let dom = domHandler.dom[0]
+
+      if (dom) {
+        return (
+          <div id="view">
+            <dom.name type={ dom.attribs.type } />
+          </div>
+        )
+      }
+      else {
+        return (
+          <div id="view"></div>
+        )
+      }
     }
   }
 }

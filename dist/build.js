@@ -28556,34 +28556,38 @@ var View = function (_Component) {
   }, {
     key: 'parseHtml',
     value: function parseHtml() {
-      var handler = new _htmlparser2.default.DomHandler({
+      var domHandler = new _htmlparser2.default.DomHandler({
         normalizeWhitespace: true
       });
-
-      var parser = new _htmlparser2.default.Parser(handler);
+      var parser = new _htmlparser2.default.Parser(domHandler);
       parser.write(this.props.markup);
       parser.done();
 
-      return handler;
+      return domHandler;
     }
   }, {
     key: 'render',
     value: function render() {
-      var parsedHtml = this.parseHtml();
+      var domHandler = this.parseHtml();
 
-      if (parsedHtml.error) {
+      if (domHandler.error) {
         return _react2.default.createElement(
           'div',
           { id: 'view' },
           'Error occurred'
         );
       } else {
-        // @TODO User parsedHtml.dom to render the elements.
-        return _react2.default.createElement(
-          'div',
-          { id: 'view' },
-          'Render parsed HTML here'
-        );
+        var dom = domHandler.dom[0];
+
+        if (dom) {
+          return _react2.default.createElement(
+            'div',
+            { id: 'view' },
+            _react2.default.createElement(dom.name, { type: dom.attribs.type })
+          );
+        } else {
+          return _react2.default.createElement('div', { id: 'view' });
+        }
       }
     }
   }]);
