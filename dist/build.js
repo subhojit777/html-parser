@@ -28528,6 +28528,10 @@ var _htmlparser = require('htmlparser2');
 
 var _htmlparser2 = _interopRequireDefault(_htmlparser);
 
+var _domutils = require('domutils');
+
+var _domutils2 = _interopRequireDefault(_domutils);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -28579,11 +28583,13 @@ var View = function (_Component) {
       } else {
         var dom = domHandler.dom[0];
 
-        if (dom) {
+        if (domHandler.dom.length) {
           return _react2.default.createElement(
             'div',
             { id: 'view' },
-            _react2.default.createElement(dom.name, { type: dom.attribs.type })
+            _domutils2.default.getElementsByTagName('input', domHandler.dom, true).map(function (o, i) {
+              return _react2.default.createElement(o.name, { type: o.attribs.type, key: i });
+            })
           );
         } else {
           return _react2.default.createElement('div', { id: 'view' });
@@ -28597,6 +28603,6 @@ var View = function (_Component) {
 
 exports.default = View;
 
-},{"htmlparser2":58,"react":217}]},{},[233])
+},{"domutils":12,"htmlparser2":58,"react":217}]},{},[233])
 
 //# sourceMappingURL=build.js.map

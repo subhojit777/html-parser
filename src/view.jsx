@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import HtmlParser from 'htmlparser2'
+import DomUtils from 'domutils'
 
 class View extends Component {
   constructor(props) {
@@ -34,10 +35,12 @@ class View extends Component {
     else {
       let dom = domHandler.dom[0]
 
-      if (dom) {
+      if (domHandler.dom.length) {
         return (
           <div id="view">
-            <dom.name type={ dom.attribs.type } />
+            { DomUtils.getElementsByTagName('input', domHandler.dom, true).map((o, i) => {
+              return <o.name type={ o.attribs.type } key={ i } />
+            }) }
           </div>
         )
       }
