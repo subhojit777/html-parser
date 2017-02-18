@@ -28438,6 +28438,57 @@ exports.default = Editor;
 },{"react":217}],233:[function(require,module,exports){
 'use strict';
 
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.getReactAttributes = getReactAttributes;
+// @TODO write test
+// Make sure the attributes are in React format.
+function getReactAttributes(attribs) {
+  var attributeKeys = Object.keys(attribs);
+
+  var _iteratorNormalCompletion = true;
+  var _didIteratorError = false;
+  var _iteratorError = undefined;
+
+  try {
+    for (var _iterator = attributeKeys[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+      var key = _step.value;
+
+      // React expects style attribute as object.
+      if (key == 'style') {
+        var objStyles = attribs[key].replace(/\s+/, '').split(';').reduce(function (a, c) {
+          var v = c.split(':').map(function (o) {
+            return o.trim();
+          });
+          a[v[0]] = v[1];
+          return a;
+        }, {});
+
+        attribs[key] = objStyles;
+      }
+    }
+  } catch (err) {
+    _didIteratorError = true;
+    _iteratorError = err;
+  } finally {
+    try {
+      if (!_iteratorNormalCompletion && _iterator.return) {
+        _iterator.return();
+      }
+    } finally {
+      if (_didIteratorError) {
+        throw _iteratorError;
+      }
+    }
+  }
+
+  return attribs;
+}
+
+},{}],234:[function(require,module,exports){
+'use strict';
+
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 var _react = require('react');
@@ -28511,7 +28562,7 @@ var Main = function (_Component) {
 
 _reactDom2.default.render(_react2.default.createElement(Main, null), mountNode);
 
-},{"./editor.jsx":232,"./view.jsx":234,"react":217,"react-dom":66}],234:[function(require,module,exports){
+},{"./editor.jsx":232,"./view.jsx":235,"react":217,"react-dom":66}],235:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -28533,6 +28584,12 @@ var _htmlparser2 = _interopRequireDefault(_htmlparser);
 var _domutils = require('domutils');
 
 var _domutils2 = _interopRequireDefault(_domutils);
+
+var _helper = require('./helper');
+
+var helper = _interopRequireWildcard(_helper);
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -28574,58 +28631,9 @@ var View = function (_Component) {
 
       return domHandler;
     }
-
-    // @TODO write test
-    // Make sure the attributes are in React format.
-
-  }, {
-    key: 'getReactAttributes',
-    value: function getReactAttributes(attribs) {
-      var attributeKeys = Object.keys(attribs);
-
-      var _iteratorNormalCompletion = true;
-      var _didIteratorError = false;
-      var _iteratorError = undefined;
-
-      try {
-        for (var _iterator = attributeKeys[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
-          var key = _step.value;
-
-          // React expects style attribute as object.
-          if (key == 'style') {
-            var objStyles = attribs[key].replace(/\s+/, '').split(';').reduce(function (a, c) {
-              var v = c.split(':').map(function (o) {
-                return o.trim();
-              });
-              a[v[0]] = v[1];
-              return a;
-            }, {});
-
-            attribs[key] = objStyles;
-          }
-        }
-      } catch (err) {
-        _didIteratorError = true;
-        _iteratorError = err;
-      } finally {
-        try {
-          if (!_iteratorNormalCompletion && _iterator.return) {
-            _iterator.return();
-          }
-        } finally {
-          if (_didIteratorError) {
-            throw _iteratorError;
-          }
-        }
-      }
-
-      return attribs;
-    }
   }, {
     key: 'render',
     value: function render() {
-      var _this2 = this;
-
       var domHandler = this.parseHtml();
 
       if (domHandler.error) {
@@ -28642,7 +28650,7 @@ var View = function (_Component) {
             'div',
             { id: 'view' },
             _domutils2.default.getElementsByTagName('input', domHandler.dom, true).map(function (o, i) {
-              return _react2.default.createElement(o.name, _extends({}, _this2.getReactAttributes(o.attribs), { key: i }));
+              return _react2.default.createElement(o.name, _extends({}, helper.getReactAttributes(o.attribs), { key: i }));
             })
           );
         } else {
@@ -28657,6 +28665,6 @@ var View = function (_Component) {
 
 exports.default = View;
 
-},{"domutils":12,"htmlparser2":58,"react":217}]},{},[233])
+},{"./helper":233,"domutils":12,"htmlparser2":58,"react":217}]},{},[234])
 
 //# sourceMappingURL=build.js.map

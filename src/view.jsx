@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import HtmlParser from 'htmlparser2'
 import DomUtils from 'domutils'
+import * as helper from './helper'
 
 class View extends Component {
   constructor(props) {
@@ -25,27 +26,6 @@ class View extends Component {
     return domHandler
   }
 
-  // @TODO write test
-  // Make sure the attributes are in React format.
-  getReactAttributes(attribs) {
-    let attributeKeys = Object.keys(attribs)
-
-    for (let key of attributeKeys) {
-      // React expects style attribute as object.
-      if (key == 'style') {
-        let objStyles = attribs[key].replace(/\s+/, '').split(';').reduce((a, c) => {
-          let v = c.split(':').map(o => o.trim())
-          a[v[0]] = v[1]
-          return a
-        }, {})
-
-        attribs[key] = objStyles
-      }
-    }
-
-    return attribs
-  }
-
   render() {
     let domHandler = this.parseHtml()
 
@@ -61,7 +41,7 @@ class View extends Component {
         return (
           <div id="view">
             { DomUtils.getElementsByTagName('input', domHandler.dom, true).map((o, i) => {
-              return <o.name { ...this.getReactAttributes(o.attribs) } key={ i } />
+              return <o.name { ...helper.getReactAttributes(o.attribs) } key={ i } />
             }) }
           </div>
         )
