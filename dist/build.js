@@ -28518,6 +28518,8 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 var _react = require('react');
@@ -28557,6 +28559,9 @@ var View = function (_Component) {
     value: function componentDidMount() {
       this.view = document.getElementById('view');
     }
+
+    // @TODO write test
+
   }, {
     key: 'parseHtml',
     value: function parseHtml() {
@@ -28569,9 +28574,58 @@ var View = function (_Component) {
 
       return domHandler;
     }
+
+    // @TODO write test
+    // Make sure the attributes are in React format.
+
+  }, {
+    key: 'getReactAttributes',
+    value: function getReactAttributes(attribs) {
+      var attributeKeys = Object.keys(attribs);
+
+      var _iteratorNormalCompletion = true;
+      var _didIteratorError = false;
+      var _iteratorError = undefined;
+
+      try {
+        for (var _iterator = attributeKeys[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+          var key = _step.value;
+
+          // React expects style attribute as object.
+          if (key == 'style') {
+            var objStyles = attribs[key].replace(/\s+/, '').split(';').reduce(function (a, c) {
+              var v = c.split(':').map(function (o) {
+                return o.trim();
+              });
+              a[v[0]] = v[1];
+              return a;
+            }, {});
+
+            attribs[key] = objStyles;
+          }
+        }
+      } catch (err) {
+        _didIteratorError = true;
+        _iteratorError = err;
+      } finally {
+        try {
+          if (!_iteratorNormalCompletion && _iterator.return) {
+            _iterator.return();
+          }
+        } finally {
+          if (_didIteratorError) {
+            throw _iteratorError;
+          }
+        }
+      }
+
+      return attribs;
+    }
   }, {
     key: 'render',
     value: function render() {
+      var _this2 = this;
+
       var domHandler = this.parseHtml();
 
       if (domHandler.error) {
@@ -28588,7 +28642,7 @@ var View = function (_Component) {
             'div',
             { id: 'view' },
             _domutils2.default.getElementsByTagName('input', domHandler.dom, true).map(function (o, i) {
-              return _react2.default.createElement(o.name, { type: o.attribs.type, key: i });
+              return _react2.default.createElement(o.name, _extends({}, _this2.getReactAttributes(o.attribs), { key: i }));
             })
           );
         } else {

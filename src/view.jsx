@@ -13,6 +13,7 @@ class View extends Component {
     this.view = document.getElementById('view')
   }
 
+  // @TODO write test
   parseHtml() {
     let domHandler = new HtmlParser.DomHandler({
       normalizeWhitespace: true
@@ -22,6 +23,27 @@ class View extends Component {
     parser.done()
 
     return domHandler
+  }
+
+  // @TODO write test
+  // Make sure the attributes are in React format.
+  getReactAttributes(attribs) {
+    let attributeKeys = Object.keys(attribs)
+
+    for (let key of attributeKeys) {
+      // React expects style attribute as object.
+      if (key == 'style') {
+        let objStyles = attribs[key].replace(/\s+/, '').split(';').reduce((a, c) => {
+          let v = c.split(':').map(o => o.trim())
+          a[v[0]] = v[1]
+          return a
+        }, {})
+
+        attribs[key] = objStyles
+      }
+    }
+
+    return attribs
   }
 
   render() {
@@ -39,7 +61,7 @@ class View extends Component {
         return (
           <div id="view">
             { DomUtils.getElementsByTagName('input', domHandler.dom, true).map((o, i) => {
-              return <o.name type={ o.attribs.type } key={ i } />
+              return <o.name { ...this.getReactAttributes(o.attribs) } key={ i } />
             }) }
           </div>
         )
