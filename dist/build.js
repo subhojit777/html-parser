@@ -28442,7 +28442,6 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports.getReactAttributes = getReactAttributes;
-// @TODO write test
 // Make sure the attributes are in React format.
 function getReactAttributes(attribs) {
   var attributeKeys = Object.keys(attribs);

@@ -1,4 +1,3 @@
-// @TODO write test
 // Make sure the attributes are in React format.
 export function getReactAttributes(attribs) {
   let attributeKeys = Object.keys(attribs)
