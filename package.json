@@ -25,6 +25,7 @@
     "domutils": "github:fb55/DomUtils",
     "htmlparser2": "^3.9.2",
     "react": "^15.4.2",
+    "react-attr-converter": "^0.1.1",
     "react-dom": "^15.4.2"
   },
   "devDependencies": {

@@ -35,13 +35,18 @@ class View extends Component {
       )
     }
     else {
-      let dom = domHandler.dom[0]
-
       if (domHandler.dom.length) {
         return (
           <div id="view">
-            { DomUtils.getElementsByTagName('input', domHandler.dom, true).map((o, i) => {
-              return <o.name { ...helper.getReactAttributes(o.attribs) } key={ i } />
+            { helper.filterEmptyElements(domHandler.dom).map((o, i) => {
+              // Return HTML tags as React component.
+              // Return text elements as it is.
+              if (o.name) {
+                return <o.name { ...helper.convertToReactAttributes(o.attribs) } key={ i } />
+              }
+              else {
+                return o.data
+              }
             }) }
           </div>
         )
