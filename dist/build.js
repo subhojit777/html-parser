@@ -28691,7 +28691,17 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports.convertToReactAttributes = convertToReactAttributes;
+exports.convertToReactStyle = convertToReactStyle;
 exports.filterEmptyElements = filterEmptyElements;
+exports.parseHtml = parseHtml;
+
+var _htmlparser = require('htmlparser2');
+
+var _htmlparser2 = _interopRequireDefault(_htmlparser);
+
+var _domutils = require('domutils');
+
+var _domutils2 = _interopRequireDefault(_domutils);
 
 var _reactAttrConverter = require('react-attr-converter');
 
@@ -28704,7 +28714,6 @@ var _map2 = _interopRequireDefault(_map);
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 // Make sure the attributes are in React format.
-// @TODO update test
 function convertToReactAttributes(attribs) {
   var attributeKeys = Object.keys(attribs);
 
@@ -28718,6 +28727,7 @@ function convertToReactAttributes(attribs) {
 
       // React expects style attribute as object.
       if (key == 'style') {
+        // @TODO Maybe we can move this to a function.
         var objStyles = attribs[key].replace(/\s+/, '').split(';').reduce(function (a, c) {
           var v = c.split(':').map(function (o) {
             return o.trim();
@@ -28753,7 +28763,6 @@ function convertToReactAttributes(attribs) {
 }
 
 // Converts style attribute to React format.
-// @TODO write test
 // @TODO Publish a module for this?
 function convertToReactStyle(style) {
   var val = _map2.default[style.toLowerCase()];
@@ -28761,7 +28770,7 @@ function convertToReactStyle(style) {
 }
 
 // Filters out empty text elements.
-// @TODO write test
+// @TODO Maybe we can contribute this to domutils?
 function filterEmptyElements(elements) {
   return elements.filter(function (e) {
     if (!(e.data && e.data.trim() === '')) {
@@ -28770,7 +28779,20 @@ function filterEmptyElements(elements) {
   });
 }
 
-},{"./map.json":237,"react-attr-converter":66}],236:[function(require,module,exports){
+// Parses HTML markup.
+function parseHtml(markup) {
+  var domHandler = new _htmlparser2.default.DomHandler({
+    normalizeWhitespace: true
+  });
+  var parser = new _htmlparser2.default.Parser(domHandler);
+
+  parser.write(markup);
+  parser.done();
+
+  return domHandler;
+}
+
+},{"./map.json":237,"domutils":12,"htmlparser2":58,"react-attr-converter":66}],236:[function(require,module,exports){
 'use strict';
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -28867,14 +28889,6 @@ var _react = require('react');
 
 var _react2 = _interopRequireDefault(_react);
 
-var _htmlparser = require('htmlparser2');
-
-var _htmlparser2 = _interopRequireDefault(_htmlparser);
-
-var _domutils = require('domutils');
-
-var _domutils2 = _interopRequireDefault(_domutils);
-
 var _helper = require('./helper');
 
 var helper = _interopRequireWildcard(_helper);
@@ -28895,10 +28909,7 @@ var View = function (_Component) {
   function View(props) {
     _classCallCheck(this, View);
 
-    var _this = _possibleConstructorReturn(this, (View.__proto__ || Object.getPrototypeOf(View)).call(this, props));
-
-    _this.parseHtml = _this.parseHtml.bind(_this);
-    return _this;
+    return _possibleConstructorReturn(this, (View.__proto__ || Object.getPrototypeOf(View)).call(this, props));
   }
 
   _createClass(View, [{
@@ -28906,25 +28917,10 @@ var View = function (_Component) {
     value: function componentDidMount() {
       this.view = document.getElementById('view');
     }
-
-    // @TODO write test
-
-  }, {
-    key: 'parseHtml',
-    value: function parseHtml() {
-      var domHandler = new _htmlparser2.default.DomHandler({
-        normalizeWhitespace: true
-      });
-      var parser = new _htmlparser2.default.Parser(domHandler);
-      parser.write(this.props.markup);
-      parser.done();
-
-      return domHandler;
-    }
   }, {
     key: 'render',
     value: function render() {
-      var domHandler = this.parseHtml();
+      var domHandler = helper.parseHtml(this.props.markup);
 
       if (domHandler.error) {
         return _react2.default.createElement(
@@ -28959,6 +28955,6 @@ var View = function (_Component) {
 
 exports.default = View;
 
-},{"./helper":235,"domutils":12,"htmlparser2":58,"react":219}]},{},[236])
+},{"./helper":235,"react":219}]},{},[236])
 
 //# sourceMappingURL=build.js.map
